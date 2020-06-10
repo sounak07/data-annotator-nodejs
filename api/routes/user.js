@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../../models/User');
+const Image = require("../../models/Image");
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('config');
@@ -102,5 +103,28 @@ router.post('/login', (req, res) => {
     });
   });
 });
+
+
+// router.post(('/uploadbase'), passport.authenticate("jwt", { session: false }), (req, res, next) => {
+//   const newImage = {};
+
+//   newImage.user = req.user.id;
+//   newImage.imageName = req.body.imageName;
+//   newImage.imageData = req.body.imageData;
+
+//   const incoming
+
+//   newImage.save()
+//     .then((result) => {
+//       res.status(200).json({
+//         success: true,
+//         document: result
+//       });
+//     })
+//     .catch((err) => next(err));
+// });
+
+
+
 
 module.exports = router;
