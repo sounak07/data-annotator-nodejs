@@ -19,16 +19,17 @@ router.post('/register', (req, res) => {
     return res.status(400).json(errors);
   }
 
-  User.findOne({ phone: req.body.phone })
+
+  User.findOne({ email: req.body.email })
     .then((user) => {
       if (user) {
-        errors.phone = 'Phone number exists';
+        errors.email = 'Email exists';
         res.status(400).json(errors);
       } else {
         const newUser = new User({
-          name: req.body.name,
-          phone: req.body.phone,
+          email: req.body.email,
           password: req.body.password,
+          isAdmin: false
         });
 
         bcryptjs.genSalt(10, (err, salt) => {
@@ -45,8 +46,7 @@ router.post('/register', (req, res) => {
                   });
                 } else {
                   res.status(200).json({
-                    phone: doc.phone,
-                    name: doc.name,
+                    email: doc.email,
                   });
                 }
               })
@@ -73,9 +73,9 @@ router.post('/login', (req, res) => {
     return res.status(400).json(errors);
   }
 
-  User.findOne({ phone: req.body.phone }).then((user) => {
+  User.findOne({ email: req.body.email }).then((user) => {
     if (!user) {
-      errors.phone = 'Not found';
+      errors.email = 'Not found';
 
       res.status(404).json(errors);
     }
@@ -84,8 +84,8 @@ router.post('/login', (req, res) => {
       if (passMatch) {
         const payLoad = {
           id: user._id,
-          phone: user.phone,
-          name: user.name,
+          email: user.email,
+          isAdmin: user.isAdmin
         };
 
         jwt.sign(payLoad, secret, { expiresIn: 3600 }, (err, token) => {
@@ -102,16 +102,5 @@ router.post('/login', (req, res) => {
     });
   });
 });
-
-router.get(
-  '/current',
-  passport.authenticate('jwt', { session: false }),
-  (req, res) => {
-    res.json({
-      phone: req.user.phone,
-      name: req.user.name,
-    });
-  }
-);
 
 module.exports = router;
