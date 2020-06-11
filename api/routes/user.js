@@ -139,12 +139,7 @@ router.post('/uploadbase', passport.authenticate("jwt", { session: false }), (re
         incomingImgs.push(element);
       });
 
-      console.log(user.images);
-
       user.images = [...user.images, ...incomingImgs];
-
-      console.log(user.images);
-
 
       user.save().then((doc) => {
         res.status(200).json({
@@ -168,7 +163,7 @@ router.post('/uploadbase', passport.authenticate("jwt", { session: false }), (re
 
 router.get('/uploadbase', passport.authenticate("jwt", { session: false }), (req, res) => {
 
-  Image.find({ __v: 0 }).then((imgs) => {
+  Image.find({}).then((imgs) => {
     if (imgs.length == 0) {
       res.status(204).json({
         error: "No imgs found"
