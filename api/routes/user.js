@@ -105,26 +105,78 @@ router.post('/login', (req, res) => {
 });
 
 
-// router.post(('/uploadbase'), passport.authenticate("jwt", { session: false }), (req, res, next) => {
-//   const newImage = {};
+router.post('/uploadbase', passport.authenticate("jwt", { session: false }), (req, res) => {
 
-//   newImage.user = req.user.id;
-//   newImage.imageName = req.body.imageName;
-//   newImage.imageData = req.body.imageData;
+  Image.findOne({ user: req.user.id }).then((user) => {
+    if (!user) {
 
-//   const incoming
+      let incomingImgs = [];
 
-//   newImage.save()
-//     .then((result) => {
-//       res.status(200).json({
-//         success: true,
-//         document: result
-//       });
-//     })
-//     .catch((err) => next(err));
-// });
+      req.body.forEach(element => {
+        incomingImgs.push(element);
+      });
+
+      const newImgCollection = new Image({
+        user: req.user.id,
+        images: incomingImgs
+      })
+
+      newImgCollection.save().then((doc) => {
+        res.status(200).json({
+          success: true,
+          doc: doc.images
+        });
+      }).catch(e => {
+        res.status(200).json({
+          error: e
+        });
+      })
+
+    } else {
+      let incomingImgs = [];
+
+      req.body.forEach(element => {
+        incomingImgs.push(element);
+      });
+
+      console.log(user.images);
+
+      user.images = [...user.images, ...incomingImgs];
+
+      console.log(user.images);
 
 
+      user.save().then((doc) => {
+        res.status(200).json({
+          success: true,
+          doc: doc.images
+        });
+      }).catch(e => {
+        res.status(200).json({
+          error: e
+        });
+      })
+    }
 
+  }).catch(e => {
+    res.status(400).json({
+      error: e
+    });
+  })
+
+});
+
+router.get('/uploadbase', passport.authenticate("jwt", { session: false }), (req, res) => {
+
+  Image.find({ __v: 0 }).then((imgs) => {
+    if (imgs.length == 0) {
+      res.status(204).json({
+        error: "No imgs found"
+      });
+    }
+
+    res.status(200).json(imgs);
+  });
+});
 
 module.exports = router;
