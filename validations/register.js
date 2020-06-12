@@ -7,21 +7,21 @@ module.exports = function registrationValid(data, type) {
   data.email = !isEmpty(data.email) ? data.email : '';
   data.password = !isEmpty(data.password) ? data.password : '';
   data.password2 = !isEmpty(data.password2) ? data.password2 : '';
-  
+
   if (!validator.isEmail(data.email)) {
-    errors[`email`] = 'email not valid';
+    errors[`${type}email`] = 'email not valid';
   }
 
   if (validator.isEmpty(data.email)) {
-    errors[`email`] = 'email cannot be empty';
+    errors[`${type}email`] = 'email cannot be empty';
   }
 
   if (!validator.isLength(data.password, { min: 6, max: 30 })) {
-    errors[`Password`] = 'Password must have atleast 6 characters';
+    errors[`${type}Password`] = 'Password must have atleast 6 characters';
   }
 
   if (validator.isEmpty(data.password)) {
-    errors[`Password`] = 'Password cannot be empty';
+    errors[`${type}Password`] = 'Password cannot be empty';
   }
 
   if (!validator.equals(data.password, data.password2)) {
