@@ -12,6 +12,7 @@ app.use(bodyParser.json());
 //routes
 const index = require('./api/routes/index');
 const user = require('./api/routes/user');
+const annotations = require('./api/routes/annotations');
 
 const logRequestStart = (req, res, next) => {
   console.info(`${req.method} ${req.originalUrl}`);
@@ -42,6 +43,7 @@ require('./config/passport')(passport);
 
 app.use('/api', index);
 app.use('/api/user', user);
+app.use('/api/annotation', annotations);
 
 const PORT = process.env.PORT || 5000;
 
