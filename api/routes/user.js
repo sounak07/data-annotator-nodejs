@@ -24,7 +24,7 @@ router.post('/register', (req, res) => {
   User.findOne({ email: req.body.email })
     .then((user) => {
       if (user) {
-        errors.email = 'Email exists';
+        errors.signupemail = 'Email exists, Please log In!';
         res.status(400).json(errors);
       } else {
         const newUser = new User({
@@ -76,7 +76,7 @@ router.post('/login', (req, res) => {
 
   User.findOne({ email: req.body.email }).then((user) => {
     if (!user) {
-      errors.email = 'Not found';
+      errors.loginemail = 'User doesnot exist';
 
       res.status(404).json(errors);
     }
