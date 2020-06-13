@@ -105,7 +105,7 @@ router.post('/login', (req, res) => {
 });
 
 
-router.post('/uploadbase', passport.authenticate("jwt", { session: false }), (req, res) => {
+router.post('/uploadbase', passport.authenticate("jwtadmin", { session: false }), (req, res) => {
 
   Image.findOne({ user: req.user.id }).then((user) => {
     if (!user) {
@@ -161,7 +161,7 @@ router.post('/uploadbase', passport.authenticate("jwt", { session: false }), (re
 
 });
 
-router.get('/uploadbase', passport.authenticate("jwt", { session: false }), (req, res) => {
+router.get('/uploadbase', passport.authenticate("jwtuser", { session: false }), (req, res) => {
 
   Image.find({}).then((imgs) => {
     if (imgs.length == 0) {

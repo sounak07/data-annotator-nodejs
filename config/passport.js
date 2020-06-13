@@ -11,11 +11,29 @@ opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = secret;
 
 module.exports = (passport) => {
-  passport.use(
+  passport.use('jwtuser',
     new JwtStrategy(opts, (jwt_payload, done) => {
       User.findById(jwt_payload.id)
         .then((user) => {
           if (user) {
+            return done(null, user);
+          }
+
+          return done(null, false);
+        })
+        .catch((e) => {
+          res.json({
+            error: e,
+          });
+        });
+    })
+  );
+
+  passport.use('jwtadmin',
+    new JwtStrategy(opts, (jwt_payload, done) => {
+      User.findById(jwt_payload.id)
+        .then((user) => {
+          if (user && jwt_payload.isAdmin === true) {
             return done(null, user);
           }
 

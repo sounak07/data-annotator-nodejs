@@ -6,7 +6,7 @@ const Annotations = require("../../models/Annotations");
 const passport = require('passport');
 
 
-router.post('/add', passport.authenticate("jwt", { session: false }), (req, res) => {
+router.post('/add', passport.authenticate("jwtuser", { session: false }), (req, res) => {
 
   Annotations.findOne({ user: req.user.id }).then((anno) => {
     if (!anno) {
@@ -59,7 +59,7 @@ router.post('/add', passport.authenticate("jwt", { session: false }), (req, res)
 });
 
 
-router.get('/', passport.authenticate("jwt", { session: false }), (req, res) => {
+router.get('/', passport.authenticate("jwtuser", { session: false }), (req, res) => {
 
   Annotations.findOne({ user: req.user.id }).then((anno) => {
 
@@ -81,7 +81,7 @@ router.get('/', passport.authenticate("jwt", { session: false }), (req, res) => 
 
 });
 
-router.get('/all', passport.authenticate("jwt", { session: false }), (req, res) => {
+router.get('/all', passport.authenticate("jwtadmin", { session: false }), (req, res) => {
 
   Annotations.find({}).then((anno) => {
 

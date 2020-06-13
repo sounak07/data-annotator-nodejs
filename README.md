@@ -1,11 +1,11 @@
+base url = https://hyper-annotator.herokuapp.com/api/
+
 Instructions
 
 cd to directory
 
-npm install
+npm i
 
-npm run dev
-
-Note : Tester is adviced to create his own cluster as mongodb atlas doesn't allow access to unknown IPS.
+node server.js
 
 Thank You!
