@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const connectDB = require('./config/dbConnect');
 const passport = require('passport');
+const path = require('path');
 
 const app = express();
 
@@ -44,6 +45,15 @@ require('./config/passport')(passport);
 app.use('/api', index);
 app.use('/api/user', user);
 app.use('/api/annotation', annotations);
+
+if (process.env.NODE_ENV === 'production') {
+  // Set static folder
+  app.use(express.static('build'));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
+  });
+}
 
 const PORT = process.env.PORT || 5000;
 
